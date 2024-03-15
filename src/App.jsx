@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm.jsx";
 import PersonList from "./components/PersonList.jsx";
+import Notification from "./components/Notification.jsx";
 import phoneService from "./services/phonebook.js";
 
 const App = () => {
@@ -10,6 +11,9 @@ const App = () => {
     const [newNumber, setNewNumber] = useState("");
     const [newSearch, setNewSearch] = useState("");
     const [showAll, setShowAll] = useState(true);
+    const [notificationMessage, setNotificationMessage] =
+        useState("Nothing added yet.");
+    const [isErrorNotification, setIsErrorNotification] = useState(false);
 
     useEffect(() => {
         phoneService.getAll().then((responseData) => {
@@ -43,15 +47,27 @@ const App = () => {
             alert(`${newName} is already added to the phonebook.`);
         } else if (samePerson && newNumber !== samePerson.number) {
             updateNumber(samePerson, newNumber);
+            setNotificationMessage(
+                `Updated phone number of ${samePerson.name}`
+            );
         } else {
             phoneService
                 .create(person)
                 .then((returnedData) =>
                     setPersons(persons.concat(returnedData))
                 );
+            setNotificationMessage(`Added ${person.name}`);
+            setIsErrorNotification(false);
         }
         setNewName("");
         setNewNumber("");
+    };
+
+    const updateNotificationMessage = (person) => {
+        setNotificationMessage(
+            `Information of ${person.name} has already been removed from server`
+        );
+        setIsErrorNotification(true);
     };
 
     // can immediately update component state and re-render without
@@ -65,12 +81,15 @@ const App = () => {
         const person = persons.find((person) => person.id === id);
         const confirmDelete = window.confirm(`Delete ${person.name} ?`);
         if (confirmDelete) {
-            phoneService.remove(person.id).then((deletedPerson) => {
-                const newPersons = persons.filter(
-                    (person) => person.id !== deletedPerson.id
-                );
-                setPersons(newPersons);
-            });
+            phoneService
+                .remove(person.id)
+                .then((deletedPerson) => {
+                    const newPersons = persons.filter(
+                        (person) => person.id !== deletedPerson.id
+                    );
+                    setPersons(newPersons);
+                })
+                .catch(() => updateNotificationMessage(person));
         }
     };
 
@@ -87,13 +106,18 @@ const App = () => {
                         person.id === responseData.id ? responseData : person
                     );
                     setPersons(newPersons);
-                });
+                })
+                .catch(() => updateNotificationMessage(personToUpdate));
         }
     };
 
     return (
         <div>
             <h2>Phonebook</h2>
+            <Notification
+                message={notificationMessage}
+                isError={isErrorNotification}
+            />
             <Filter newSearch={newSearch} onSearchChange={handleSearchChange} />
             <h3>add a new</h3>
             <PersonForm
