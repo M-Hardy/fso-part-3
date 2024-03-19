@@ -85,7 +85,7 @@ const App = () => {
                 .remove(person.id)
                 .then((deletedPerson) => {
                     const newPersons = persons.filter(
-                        (person) => person.id !== deletedPerson.id
+                        (person) => person.id !== id
                     );
                     setPersons(newPersons);
                 })

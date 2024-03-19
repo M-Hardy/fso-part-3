@@ -1,7 +1,9 @@
 const express = require("express");
 const morgan = require("morgan");
+const cors = require("cors");
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 app.use(express.static("dist"));
 app.use(morgan("tiny"));
@@ -69,9 +71,7 @@ const generateId = (max = 10000) => {
 };
 
 app.post("/api/persons", (request, response) => {
-    console.log(request);
     const body = request.body;
-
     if (!body.name || !body.number) {
         return response.status(400).json({
             error: "content missing",
