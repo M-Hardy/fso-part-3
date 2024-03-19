@@ -1,1 +1,1 @@
-DELETE http://localhost:3001/api/persons/7492
+DELETE https://fso-part-3-qt29.onrender.com/api/persons/2
