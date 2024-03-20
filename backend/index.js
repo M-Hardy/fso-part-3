@@ -18,13 +18,13 @@ app.get("/", (request, response) => {
 });
 
 app.get("/info", (request, response) => {
-    const numContacts = Contact.find({}).then((contacts) => {
-        return contacts.length;
+    Contact.find({}).then((contacts) => {
+        const numContacts = contacts.length;
+        const requestTime = new Date().toString();
+        response.send(
+            `<p>Phonebook has info for ${numContacts} people</p><p>${requestTime}</p>`
+        );
     });
-    const requestTime = new Date().toString();
-    response.send(
-        `<p>Phonebook has info for ${numContacts} people</p><p>${requestTime}</p>`
-    );
 });
 
 app.get("/api/contacts", (request, response) => {

@@ -2,4 +2,4 @@
 // GET https://fso-part-3-qt29.onrender.com/api/persons
 
 // local host
-GET https://localhost:3001/api/contacts
+GET http://localhost:3001/api/contacts
