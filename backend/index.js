@@ -45,33 +45,21 @@ app.delete("/api/contacts/:id", (request, response) => {
     response.status(204).end();
 });
 
-const generateId = (max = 10000) => {
-    const id = Math.floor(Math.random() * max);
-    return id;
-};
-
 app.post("/api/contacts", (request, response) => {
     const body = request.body;
+
     if (!body.name || !body.number) {
-        return response.status(400).json({
-            error: "content missing",
-        });
+        return response.status(400).json({ error: "content missing" });
     }
 
-    if (persons.find((person) => person.name === body.name)) {
-        return response.status(400).json({
-            error: "name must be unique",
-        });
-    }
-
-    const newPerson = {
+    const contact = new Contact({
         name: body.name,
         number: body.number,
-        id: generateId(),
-    };
+    });
 
-    persons = persons.concat(newPerson);
-    response.json(newPerson);
+    contact.save().then((savedContact) => {
+        response.json(savedContact);
+    });
 });
 
 app.listen(PORT, () => {
