@@ -1,3 +1,2 @@
-// local host
-// get "Arto Vihavainen"
+### test local host - should get "Arto Vihavainen"
 GET http://localhost:3001/api/contacts/65f9e6eef909160683f9dc5b

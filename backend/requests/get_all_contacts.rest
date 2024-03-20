@@ -1,5 +1,5 @@
-// deployed
-// GET https://fso-part-3-qt29.onrender.com/api/persons
+### test deployed app
+GET https://fso-part-3-qt29.onrender.com/api/persons
 
-// local host
+### local host
 GET http://localhost:3001/api/contacts

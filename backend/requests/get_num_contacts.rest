@@ -1,3 +1,2 @@
-// local host
-// Get 3
+### test local host
 GET http://localhost:3001/info
