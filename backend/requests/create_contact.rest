@@ -3,8 +3,8 @@ POST https://fso-part-3-qt29.onrender.com/api/contacts
 content-type: application/json
 
 {
-    "name": "Knight Artorius",
-    "number": "911"
+    "name": "AddedOnDeployedAppUsingRESTClient",
+    "number": "099"
 }
 
 ### test local host
