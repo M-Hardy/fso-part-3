@@ -1,7 +1,17 @@
-POST https://fso-part-3-qt29.onrender.com/api/persons
+### test deployed app
+POST https://fso-part-3-qt29.onrender.com/api/contacts
 content-type: application/json
 
 {
-    "name": "Artom Hellas",
-    "number": "040-123456"
+    "name": "Knight Artorius",
+    "number": "911"
+}
+
+### test local host
+POST http://localhost:3001/api/contacts
+content-type: application/json
+
+{
+    "name": "Knight Artorius",
+    "number": "911"
 }
