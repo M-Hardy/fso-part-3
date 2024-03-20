@@ -12,6 +12,6 @@ POST http://localhost:3001/api/contacts
 content-type: application/json
 
 {
-    "name": "Knight Artorius",
-    "number": "911"
+    "name": "Testing locally using RESTClient",
+    "number": "011"
 }
