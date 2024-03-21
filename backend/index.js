@@ -49,7 +49,7 @@ app.get("/api/contacts/:id", (request, response, next) => {
         .catch((error) => next(error));
 });
 
-app.post("/api/contacts", (request, response) => {
+app.post("/api/contacts", (request, response, next) => {
     const body = request.body;
 
     if (!body.name || !body.number) {
@@ -61,9 +61,12 @@ app.post("/api/contacts", (request, response) => {
         number: body.number,
     });
 
-    contact.save().then((savedContact) => {
-        response.json(savedContact);
-    });
+    contact
+        .save()
+        .then((savedContact) => {
+            response.json(savedContact);
+        })
+        .catch((error) => next(error));
 });
 
 app.put("/api/contacts/:id", (request, response, next) => {
@@ -96,6 +99,10 @@ const errorHandler = (error, request, response, next) => {
     // (does not conform to expected format of an Object Id)
     if (error.name === "CastError") {
         return response.status(400).send({ error: "malformatted id" });
+    }
+
+    if (error.name === "ValidationError") {
+        return response.status(400).send({ error: error.message });
     }
 
     next(error);

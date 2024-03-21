@@ -55,7 +55,13 @@ const App = () => {
                 .create(person)
                 .then((returnedData) =>
                     setPersons(persons.concat(returnedData))
-                );
+                )
+                .catch((error) => {
+                    const errorMsg = error.response.data.error;
+                    console.log(errorMsg);
+                    setNotificationMessage(errorMsg);
+                    setIsErrorNotification(true);
+                });
             setNotificationMessage(`Added ${person.name}`);
             setIsErrorNotification(false);
         }
