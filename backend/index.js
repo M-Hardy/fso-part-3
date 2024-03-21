@@ -17,32 +17,34 @@ app.get("/", (request, response) => {
     response.send("<h1>This is the application's root directory</h1>");
 });
 
-app.get("/info", (request, response) => {
-    Contact.find({}).then((contacts) => {
-        const numContacts = contacts.length;
-        const requestTime = new Date().toString();
-        response.send(
-            `<p>Phonebook has info for ${numContacts} people</p><p>${requestTime}</p>`
-        );
-    });
+app.get("/info", (request, response, next) => {
+    Contact.find({})
+        .then((contacts) => {
+            const numContacts = contacts.length;
+            const requestTime = new Date().toString();
+            response.send(
+                `<p>Phonebook has info for ${numContacts} people</p><p>${requestTime}</p>`
+            );
+        })
+        .catch((error) => next(error));
 });
 
-app.get("/api/contacts", (request, response) => {
-    Contact.find({}).then((contacts) => {
-        response.json(contacts);
-    });
+app.get("/api/contacts", (request, response, next) => {
+    Contact.find({})
+        .then((contacts) => {
+            response.json(contacts);
+        })
+        .catch((error) => next(error));
 });
 
-app.get("/api/contacts/:id", (request, response) => {
-    Contact.findById(request.params.id).then((contact) => {
-        response.json(contact);
-    });
-});
-
-app.delete("/api/contacts/:id", (request, response, next) => {
-    Contact.findByIdAndDelete(request.params.id)
-        .then((result) => {
-            response.status(204).end();
+app.get("/api/contacts/:id", (request, response, next) => {
+    Contact.findById(request.params.id)
+        .then((contact) => {
+            if (contact) {
+                response.json(contact);
+            } else {
+                response.status(404).end();
+            }
         })
         .catch((error) => next(error));
 });
@@ -62,6 +64,29 @@ app.post("/api/contacts", (request, response) => {
     contact.save().then((savedContact) => {
         response.json(savedContact);
     });
+});
+
+app.put("/api/contacts/:id", (request, response, next) => {
+    const body = request.body;
+
+    const contact = {
+        name: body.name,
+        number: body.number,
+    };
+
+    Contact.findByIdAndUpdate(request.params.id, contact, { new: true })
+        .then((updatedNote) => {
+            response.json(updatedNote);
+        })
+        .catch((error) => next(error));
+});
+
+app.delete("/api/contacts/:id", (request, response, next) => {
+    Contact.findByIdAndDelete(request.params.id)
+        .then((result) => {
+            response.status(204).end();
+        })
+        .catch((error) => next(error));
 });
 
 const errorHandler = (error, request, response, next) => {
