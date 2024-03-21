@@ -1,1 +1,6 @@
-DELETE https://fso-part-3-qt29.onrender.com/api/persons/2
+### test deployed app
+DELETE https://fso-part-3-qt29.onrender.com/api/contacts/2
+
+
+### test local host
+DELETE http://localhost:3001/api/contacts/65fb7ab35feff0430ed5524b
