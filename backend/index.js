@@ -39,10 +39,12 @@ app.get("/api/contacts/:id", (request, response) => {
     });
 });
 
-app.delete("/api/contacts/:id", (request, response) => {
-    const id = Number(request.params.id);
-    persons = persons.filter((person) => person.id !== id);
-    response.status(204).end();
+app.delete("/api/contacts/:id", (request, response, next) => {
+    Contact.findByIdAndDelete(request.params.id)
+        .then((result) => {
+            response.status(204).end();
+        })
+        .catch((error) => next(error));
 });
 
 app.post("/api/contacts", (request, response) => {
@@ -61,6 +63,19 @@ app.post("/api/contacts", (request, response) => {
         response.json(savedContact);
     });
 });
+
+const errorHandler = (error, request, response, next) => {
+    console.error(error.message);
+
+    // given ID cannot be cast to ObjectId by Mongo - malformatted ID given
+    // (does not conform to expected format of an Object Id)
+    if (error.name === "CastError") {
+        return response.status(400).send({ error: "malformatted id" });
+    }
+
+    next(error);
+};
+app.use(errorHandler);
 
 app.listen(PORT, () => {
     console.log(`App is running on port ${PORT}`);
