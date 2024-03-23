@@ -1,4 +1,6 @@
 # Full Stack Open, Part 3 - Phonebook App
 
-Recommended separate repo FSO P3 exercises - building phonebook web app.
-Linked to deployed app: https://fso-part-3-qt29.onrender.com/
+Full Stack Open Part 3 solutions - deployed phonebook web app.
+
+Visit deployed app: https://fso-part-3-qt29.onrender.com/ <br />
+Go to base Full Stack Open repo: https://github.com/M-Hardy/full-stack-open
